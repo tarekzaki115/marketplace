@@ -2,19 +2,35 @@
 
 <h2>Home</h2>
 
-<p>
-    {%if items%}
-    <ul>
-        {% for item in items%}
-        <li>
-            {{item.item_name}}
-        <ul>{{item.price}}</ul>
-        </li>
-        {%endfor%}
-    </ul>
-    {%endif%}
-</p>
+<div>
+    <p>
+        {%if items%}
+        <ul>
+            {% for item in items%}
+            <li>
+                {{item}}
+            <ul>{{item.price}}</ul>
+            </li>
+            {%endfor%}
+        </ul>
+        {%endif%}
+    </p>
+</div>
+<h2>Catagories</h2>
 
+<div>
+    <p>
+        {%if catagories%}
+        <ul>
+            {% for catagory in catagories%}
+            <li>
+                {{catagory}}
+            </li>
+            {%endfor%}
+        </ul>
+        {%endif%}
+    </p>
+</div>
 <footer>
     <div>
         <p><b>About</b>

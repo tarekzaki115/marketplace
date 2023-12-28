@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
+from django.db.models import Count
 
 from item.models import Category, Item
 
@@ -12,10 +13,14 @@ class indexView(generic.ListView):
     template_name = "core\index.html"
 
     def get_queryset(self):
+        self.catagories = Category.objects.filter(category__isnull=True).order_by(
+            "category_name"
+        )[:3]
         self.items = Item.objects.all().order_by("created_at")[:2]
-        return self.items
+        return self
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["items"] = self.items
+        context["catagories"] = self.catagories
         return context
