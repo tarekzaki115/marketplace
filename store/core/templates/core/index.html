@@ -7,8 +7,9 @@
         {%if items%}
         <ul>
             {% for item in items%}
-            <li>
+            <li><a href="{% url 'item' item.id %}">
                 {{item}}
+            </a>
             <ul>{{item.price}}</ul>
             </li>
             {%endfor%}

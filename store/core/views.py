@@ -24,3 +24,17 @@ class indexView(generic.ListView):
         context["items"] = self.items
         context["catagories"] = self.catagories
         return context
+
+
+class itemDetailView(generic.DetailView):
+    model = Item
+    template_name = "core\item.html"
+
+    def get_object(self):
+        self.item = Item.objects.get(pk=self.kwargs["pk"])
+        return self
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["item"] = self.item
+        return context
