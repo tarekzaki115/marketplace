@@ -1,11 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
-from django.views import generic
+from django.views import generic, View
 from django.db.models import Count
+from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
+from django.contrib import messages
+
 
 from item.models import Category, Item
+from user.models import User
+from user.forms import UserCreationForm, UserChangeForm
 
 
 class indexView(generic.ListView):
@@ -38,3 +43,28 @@ class itemDetailView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         context["item"] = self.item
         return context
+
+
+class userCreateView(View):
+    def get(self, request):
+        form = UserCreationForm()
+        return render(request, "core/register.html", {"form": form})
+
+    def post(self, request):
+        form = UserCreationForm(request.POST)
+        if form.is_valid:
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Registration successful")
+            return redirect("register")
+        else:
+            messages.error(request, "Registration was not successful")
+            return redirect("register")
+
+
+class userChangeView(View):
+    def get(self, request):
+        pass
+
+    def post(self, request):
+        pass

@@ -21,6 +21,7 @@ class Item(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     stock = models.PositiveIntegerField(blank=True, null=True)
     sold = models.PositiveIntegerField(blank=True, null=True)
+    description = models.CharField(max_length=300, blank=True, null=True)
 
     def __str__(self):
         return self.item_name
