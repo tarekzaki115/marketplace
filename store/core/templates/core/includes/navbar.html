@@ -5,8 +5,16 @@
     <li><a href="{% url 'index' %}">Home</a></li>
     <li>New Item</li>
     <li>Browse</li>
-    <li>sign up</li>
-    <li>log in</li>
+    {%if request.user.is_superuser %}
+      <li><a href="/admin/">Admin View</a></li> 
+      <li><a href= " {% url 'logout' %}">Logout</a></li>
+    {%elif request.user.is_authenticated %}
+      <li><a href= " {% url 'logout' %}">Logout</a></li>
+      <li><a href= " {% url 'editUser' %}">Edit profile</a></li>
+    {% else %}
+      <li><a href="{% url 'register'%}">sign up</a></li>
+      <li><a href="{% url 'login'%}">log in</a></li>
+    {% endif %}
   </ul>
 </h1>
 {% endblock %} {% comment %} {% block %} {% endblock %} {% endcomment %}

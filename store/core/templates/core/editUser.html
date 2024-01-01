@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{%extends 'core/includes/navBar.html' %} {%block title%}
+<head>
+  <title>Edit Info</title>
+</head>
+{%endblock%}
+{%load crispy_forms_tags%}
+{%block content2%}
+
+<form method="POST" class="form-group">
+    {% csrf_token %} {{ edit_form|crispy }}
+    <button type="submit" class="btn btn-success">Confirm</button>
+  </form>
+
+<body>
+  <p>
+    Need to change you password?
+    <a  class="btn" href = {% url 'changeUserPassword' %}>Change password</a>
+  </p>
+</body>
+{%endblock%}

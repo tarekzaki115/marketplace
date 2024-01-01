@@ -1,11 +1,11 @@
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse
 from django.views import generic, View
 from django.db.models import Count
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.decorators import login_required
 
 
 from item.models import Category, Item
@@ -56,15 +56,79 @@ class userCreateView(View):
             user = form.save()
             login(request, user)
             messages.success(request, "Registration successful")
-            return redirect("register")
+            return redirect("index")
         else:
             messages.error(request, "Registration was not successful")
             return redirect("register")
 
 
-class userChangeView(View):
+class userEditView(View):
+    login_url = "login"
+    redirect_field_name = "editUser"
+
     def get(self, request):
-        pass
+        form = UserChangeForm(instance=request.user)
+        return render(request, "core/editUser.html", {"edit_form": form})
 
     def post(self, request):
-        pass
+        form = UserChangeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, "Edit is successful")
+            return redirect("index")
+        else:
+            messages.error(request, "Edit is unsuccessful")
+            return redirect("editUser")
+
+
+class changeUserPasswordView(LoginRequiredMixin, View):
+    login_url = "login"
+    redirect_field_name = "changeUserPassword"
+
+    def get(self, request):
+        form = PasswordChangeForm(user=request.user)
+        return render(request, "core/changeUserPassword.html", {"form": form})
+
+    def post(self, request):
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, request.user)
+            messages.success(request, "You successfully changed your password")
+            return redirect("index")
+        else:
+            messages.error(request, "Password is invalid")
+            return redirect("changeUserPassword")
+
+
+class loginView(View):
+    def get(self, request):
+        form = AuthenticationForm()
+        return render(request, "core/login.html", {"login_form": form})
+
+    def post(self, request):
+        form = AuthenticationForm(request, request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"You are now logged in as {username}.")
+                return redirect("index")
+            else:
+                messages.error(request, "Invalid username or password.")
+                return redirect("login")
+        else:
+            messages.error(request, "Invalid username or password.")
+            return redirect("login")
+
+
+class logoutView(LoginRequiredMixin, View):
+    login_url = "login"
+    redirect_field_name = "logout"
+
+    def get(self, request):
+        logout(request)
+        messages.success(request, "You are Logged out")
+        return redirect("index")
