@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 
 from item.models import Category, Item
 from user.models import User
-from user.forms import UserCreationForm, UserChangeForm
+from user.forms import register_user_form, change_user_form
 
 
 class indexView(generic.ListView):
@@ -47,11 +47,11 @@ class itemDetailView(generic.DetailView):
 
 class userCreateView(View):
     def get(self, request):
-        form = UserCreationForm()
+        form = register_user_form()
         return render(request, "core/register.html", {"form": form})
 
     def post(self, request):
-        form = UserCreationForm(request.POST)
+        form = register_user_form(request.POST)
         if form.is_valid:
             user = form.save()
             login(request, user)
@@ -67,11 +67,11 @@ class userEditView(View):
     redirect_field_name = "editUser"
 
     def get(self, request):
-        form = UserChangeForm(instance=request.user)
+        form = change_user_form(instance=request.user)
         return render(request, "core/editUser.html", {"edit_form": form})
 
     def post(self, request):
-        form = UserChangeForm(request.POST, instance=request.user)
+        form = change_user_form(request.POST, instance=request.user)
         if form.is_valid():
             user = form.save()
             messages.success(request, "Edit is successful")
