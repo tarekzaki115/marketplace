@@ -1,4 +1,5 @@
 from django.db import models
+from user.models import User
 
 
 class Category(models.Model):
@@ -12,6 +13,7 @@ class Category(models.Model):
 
 
 class Item(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, blank=False, null=False
     )
