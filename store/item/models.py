@@ -13,7 +13,9 @@ class Category(models.Model):
 
 
 class Item(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, blank=False, null=False, default=0
+    )
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, blank=False, null=False
     )

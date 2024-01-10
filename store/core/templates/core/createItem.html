@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+{%extends 'core/includes/navBar.html' %} {%block title%}
+<head>
+  <title>Add Item</title>
+</head>
+{%endblock%}
+{%load crispy_forms_tags%}
+{%block content2%}
+
+<form method="POST" class="form-group">
+    {% csrf_token %} {{ form|crispy }}
+    <button type="submit" class="btn btn-success">Confirm</button>
+  </form>
+{%endblock%}

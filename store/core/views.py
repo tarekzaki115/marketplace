@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from item.models import Category, Item
 from user.models import User
 from user.forms import register_user_form, change_user_form
+from item.forms import create_item_form
 
 
 class indexView(generic.ListView):
@@ -132,3 +133,19 @@ class logoutView(LoginRequiredMixin, View):
         logout(request)
         messages.success(request, "You are Logged out")
         return redirect("index")
+
+
+class addItemView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = create_item_form(user=request.user)
+        return render(request, "core/createItem.html", {"form": form})
+
+    def post(self, request):
+        form = create_item_form(request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "You added a new Item successfully")
+            return redirect("createItem")
+        else:
+            messages.error(request, "Adding Item failed")
+            return redirect("createItem")
