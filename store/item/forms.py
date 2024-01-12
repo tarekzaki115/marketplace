@@ -3,11 +3,9 @@ from .models import Item
 
 
 class create_item_form(forms.ModelForm):
-    def __init__(self, *args, user, **kwargs):
-        super().__init__(*args, **kwargs)
-        if user is not None:
-            self.user = kwargs.get("user")
-            kwargs.pop("user")
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super(create_item_form, self).__init__(*args, **kwargs)
 
     class Meta:
         model = Item

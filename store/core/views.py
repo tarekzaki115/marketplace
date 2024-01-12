@@ -16,7 +16,7 @@ from item.forms import create_item_form
 
 class indexView(generic.ListView):
     model = Item
-    template_name = "core\index.html"
+    template_name = "core/index.html"
 
     def get_queryset(self):
         self.catagories = Category.objects.filter(category__isnull=True).order_by(
@@ -34,7 +34,7 @@ class indexView(generic.ListView):
 
 class itemDetailView(generic.DetailView):
     model = Item
-    template_name = "core\item.html"
+    template_name = "core/item.html"
 
     def get_object(self):
         self.item = Item.objects.get(pk=self.kwargs["pk"])
@@ -141,7 +141,7 @@ class addItemView(LoginRequiredMixin, View):
         return render(request, "core/createItem.html", {"form": form})
 
     def post(self, request):
-        form = create_item_form(request.POST, user=request.user)
+        form = create_item_form(user=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, "You added a new Item successfully")
