@@ -137,13 +137,19 @@ class logoutView(LoginRequiredMixin, View):
 
 class addItemView(LoginRequiredMixin, View):
     def get(self, request):
-        form = create_item_form(user=request.user)
-        return render(request, "core/createItem.html", {"form": form})
+        if request.user.is_seller:
+            form = create_item_form()
+            return render(request, "core/createItem.html", {"form": form})
+        else:
+            messages.error(request, "Please apply for the seller program")
+            return redirect("index")
 
     def post(self, request):
-        form = create_item_form(user=request.user)
+        form = create_item_form(request.POST)
         if form.is_valid():
-            form.save()
+            item = form.save(commit=False)
+            item.user = request.user
+            item.save()
             messages.success(request, "You added a new Item successfully")
             return redirect("createItem")
         else:
