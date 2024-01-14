@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{%extends 'core/includes/navBar.html' %} {%block title%}
+<head>
+  <title>dashboard</title>
+</head>
+{%endblock%}
+{%block content2%}
+
+<div>
+    {%if items%}
+        {% for item in items%}
+            <div>
+                <ul>
+                    <li>
+                        <ul><img src = {{item.image}} width="500" height="500"/></ul>
+                        <ul><a href="{% url 'item' item.id %}">{{item.item_name}}</a></ul>
+                        <br><br>
+                        <ul><a href="{% url 'editItem' item.id %}">Edit item</a></ul>
+                        <ul><a href="{% url 'deleteItem' item.id %}">Delete item</a></ul>
+                    </li>
+                </ul>
+            </div><br><br>
+        {% endfor %}
+    {%else%}
+            <p>There are no items</p>
+    {%endif%}
+</div>
+
+{%endblock%}

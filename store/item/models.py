@@ -26,6 +26,7 @@ class Item(models.Model):
     stock = models.PositiveIntegerField(blank=True, null=True)
     sold = models.PositiveIntegerField(blank=True, null=True)
     description = models.CharField(max_length=300, blank=True, null=True)
+    image = models.URLField(blank=True, null=True, max_length=1000)
 
     def __str__(self):
         return self.item_name

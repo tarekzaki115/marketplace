@@ -155,3 +155,24 @@ class addItemView(LoginRequiredMixin, View):
         else:
             messages.error(request, "Adding Item failed")
             return redirect("createItem")
+
+
+class dashboardView(LoginRequiredMixin, View):
+    def get(self, request):
+        items = Item.objects.filter(user=request.user)
+        return render(request, "core/dashboard.html", {"items": items})
+
+
+class editItemView(LoginRequiredMixin, View):
+    def get(self, request):
+        return
+
+
+@login_required(login_url="login", redirect_field_name="core/dashboard.html")
+def deleteItemView(request, item_id):
+    item = Item.objects.get(pk=item_id)
+    if request.user.is_authenticated:
+        item.delete()
+        return redirect("dashboard")
+    else:
+        return redirect("login")

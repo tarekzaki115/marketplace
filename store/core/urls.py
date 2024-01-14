@@ -10,4 +10,7 @@ urlpatterns = [
     path("login/", loginView.as_view(), name="login"),
     path("logout/", logoutView.as_view(), name="logout"),
     path("createItem/", addItemView.as_view(), name="createItem"),
+    path("dashboard/", dashboardView.as_view(), name="dashboard"),
+    path("editItem/", editItemView.as_view(), name="editItem"),
+    path("deleteItem/", deleteItemView(), name="deleteItem"),
 ]

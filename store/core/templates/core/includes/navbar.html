@@ -7,10 +7,13 @@
     {%if request.user.is_superuser %}
       <li><a href="/admin/">Admin View</a></li> 
       <li><a href= " {% url 'logout' %}">Logout</a></li>
+      <li><a href= " {% url 'createItem' %}">New Item</a></li>
+      <li><a href= " {% url 'dashboard' %}">Dashboard</a></li>
     {%elif request.user.is_authenticated %}
       <li><a href= " {% url 'logout' %}">Logout</a></li>
       <li><a href= " {% url 'editUser' %}">Edit profile</a></li>
       <li><a href= " {% url 'createItem' %}">New Item</a></li>
+      <li><a href= " {% url 'dashboard' %}">Dashboard</a></li>
     {% else %}
       <li><a href="{% url 'register'%}">sign up</a></li>
       <li><a href="{% url 'login'%}">log in</a></li>
