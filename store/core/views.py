@@ -177,3 +177,15 @@ class deleteItemView(DeleteView):
     model = Item
     success_url = reverse_lazy("dashboard")
     template_name = "core/deleteItem.html"
+
+
+class SearchItemView(View):
+    def get(self, request):
+        if self.kwargs["pk"]:
+            catagory = Category.objects.filter(pk=self.kwargs["pk"])
+            items = Item.objects.filter(catagory=catagory)
+            context = {"catagory": catagory, "items": items}
+            return render(request, "core/search.html", context)
+        else:
+            catagories = Category.objects.all()
+            return render(request, "core/search.html", {"catagories": catagories})
