@@ -6,3 +6,9 @@ class create_item_form(forms.ModelForm):
     class Meta:
         model = Item
         fields = ["category", "item_name", "price", "stock", "description", "image"]
+
+
+class edit_item_form(forms.ModelForm):
+    class Meta:
+        model = Item
+        fields = ["category", "item_name", "price", "stock", "description", "image"]

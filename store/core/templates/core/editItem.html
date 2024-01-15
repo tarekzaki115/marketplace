@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+{%extends 'core/includes/navBar.html' %} {%block title%}
+<head>
+  <title>Edit Item</title>
+</head>
+{%endblock%}
+{%load crispy_forms_tags%}
+{%block content2%}
+
+<form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Update">
+</form>
+
+{%endblock%}

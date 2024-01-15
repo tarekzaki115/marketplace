@@ -6,12 +6,13 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
-
+from django.views.generic.edit import UpdateView, DeleteView
+from django.urls import reverse_lazy
 
 from item.models import Category, Item
 from user.models import User
 from user.forms import register_user_form, change_user_form
-from item.forms import create_item_form
+from item.forms import create_item_form, edit_item_form
 
 
 class indexView(generic.ListView):
@@ -63,7 +64,7 @@ class userCreateView(View):
             return redirect("register")
 
 
-class userEditView(View):
+class userEditView(LoginRequiredMixin, View):
     login_url = "login"
     redirect_field_name = "editUser"
 
@@ -160,19 +161,19 @@ class addItemView(LoginRequiredMixin, View):
 class dashboardView(LoginRequiredMixin, View):
     def get(self, request):
         items = Item.objects.filter(user=request.user)
+        for item in items:
+            print(item.pk)
         return render(request, "core/dashboard.html", {"items": items})
 
 
-class editItemView(LoginRequiredMixin, View):
-    def get(self, request):
-        return
+class editItemView(UpdateView):
+    model = Item
+    fields = ["category", "item_name", "price", "stock", "description", "image"]
+    template_name = "core/editItem.html"
+    success_url = reverse_lazy("dashboard")
 
 
-@login_required(login_url="login", redirect_field_name="core/dashboard.html")
-def deleteItemView(request, item_id):
-    item = Item.objects.get(pk=item_id)
-    if request.user.is_authenticated:
-        item.delete()
-        return redirect("dashboard")
-    else:
-        return redirect("login")
+class deleteItemView(DeleteView):
+    model = Item
+    success_url = reverse_lazy("dashboard")
+    template_name = "core/deleteItem.html"

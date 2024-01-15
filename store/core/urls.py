@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import *
 
+
 urlpatterns = [
     path("", indexView.as_view(), name="index"),
     path("<int:pk>/", itemDetailView.as_view(), name="item"),
@@ -11,6 +12,6 @@ urlpatterns = [
     path("logout/", logoutView.as_view(), name="logout"),
     path("createItem/", addItemView.as_view(), name="createItem"),
     path("dashboard/", dashboardView.as_view(), name="dashboard"),
-    path("editItem/", editItemView.as_view(), name="editItem"),
-    path("deleteItem/", deleteItemView(), name="deleteItem"),
+    path("editItem/<int:pk>/", editItemView.as_view(), name="editItem"),
+    path("deleteItem/<int:pk>/", deleteItemView.as_view(), name="deleteItem"),
 ]
