@@ -8,6 +8,7 @@ from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.db.models import Q
 
 from item.models import Category, Item
 from user.models import User
@@ -180,12 +181,28 @@ class deleteItemView(DeleteView):
 
 
 class SearchItemView(View):
-    def get(self, request):
-        if self.kwargs["pk"]:
-            catagory = Category.objects.filter(pk=self.kwargs["pk"])
-            items = Item.objects.filter(catagory=catagory)
-            context = {"catagory": catagory, "items": items}
+    def get(self, request, pk=None, search=None):
+        if pk and search == None:
+            category = Category.objects.get(pk=pk)
+            items = Item.objects.filter(category=category)
+            context = {"category": category, "items": items}
+            return render(request, "core/search.html", context)
+        elif pk and search:
+            query = self.request.GET.get("q")
+            category = Category.objects.get(pk=pk)
+            items = Item.objects.filter(
+                Q(item_name__contain=query) & Q(category=category)
+            )
+            context = {"category": category, "items": items}
+            return render(request, "core/search.html", context)
+
+        elif pk == None and search:
+            query = self.request.GET.get("q")
+            items = Item.objects.filter(item_name__contain=query)
+            context = {"items": items}
             return render(request, "core/search.html", context)
         else:
-            catagories = Category.objects.all()
-            return render(request, "core/search.html", {"catagories": catagories})
+            categories = Category.objects.all()
+            items = Item.objects.all()
+            context = {"categories": categories, "items": items}
+            return render(request, "core/search.html", context)

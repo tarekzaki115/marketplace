@@ -1,0 +1,67 @@
+{%extends 'core/includes/navBar.html' %} {%block content2%}
+
+<div>
+    <form action="{% url 'SearchItem' 'search'%}" method="get">
+        <input
+          type="search"
+          name="q"
+          placeholder="Search by name of item"
+          class="form-control"
+        />
+      </form>
+      
+</div><br><br>
+
+<div>
+    {%if categories%}
+        {% for category in categories%}
+            <div>
+                <ul>
+                    <li>
+                        <a href="{% url 'SearchItem' category.id %}">{{category}}</a>
+                    </li>
+                </ul>
+            </div><br><br>
+        {% endfor %}
+
+        {%if items%}
+                {% for item in items%}
+                <div>
+                    <ul>
+                        <li>
+                            <ul><a href="{% url 'item' item.id %}">{{item.item_name}}</a></ul>
+                            <br><br>
+                        </li>
+                    </ul>
+                </div><br><br>
+                {% endfor %}
+        
+        {% endif %}
+            <p>There are no items</p>
+    {%endif%}
+<div>
+    {% if category %}
+        <p>{{category}}</p>
+        <br><br>
+        {% if items %}
+            {% for item in items %}
+            <div>
+                <ul>
+                    <li>
+                        <ul><img src = {{item.image}} width="500" height="500"/></ul>
+                        <ul><a href="{% url 'item' item.id %}">{{item.item_name}}</a></ul>
+                        <br><br>
+                        <ul>{{item.price}}</ul>
+                    </li>
+                </ul>
+            </div><br><br>
+        
+            {% endfor %}
+        {% else %}
+            <p>There are no items</p>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
+
+

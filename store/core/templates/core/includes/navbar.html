@@ -3,7 +3,7 @@
 <h1>
   <ul>
     <li><a href="{% url 'index' %}">Home</a></li>
-    <li>Browse</li>
+    <li><a href= " {% url 'SearchItem' %}">Browse</a></li>
     {%if request.user.is_superuser %}
       <li><a href="/admin/">Admin View</a></li> 
       <li><a href= " {% url 'logout' %}">Logout</a></li>

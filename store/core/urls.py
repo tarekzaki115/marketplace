@@ -14,4 +14,27 @@ urlpatterns = [
     path("dashboard/", dashboardView.as_view(), name="dashboard"),
     path("editItem/<int:pk>/", editItemView.as_view(), name="editItem"),
     path("deleteItem/<int:pk>/", deleteItemView.as_view(), name="deleteItem"),
+    path(
+        "SearchItem/",
+        SearchItemView.as_view(),
+        {"pk": None, "search": None},
+        name="SearchItem",
+    ),
+    path(
+        "SearchItem/<int:pk>/",
+        SearchItemView.as_view(),
+        {"search": None},
+        name="SearchItem",
+    ),
+    path(
+        "SearchItem/<str:search>/",
+        SearchItemView.as_view(),
+        {"pk": None},
+        name="SearchItem",
+    ),
+    path(
+        "SearchItem/<int:pk>/<str:search>/",
+        SearchItemView.as_view(),
+        name="SearchItem",
+    ),
 ]
