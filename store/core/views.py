@@ -15,6 +15,7 @@ from user.models import User
 from user.forms import register_user_form, change_user_form
 from item.forms import create_item_form, edit_item_form
 
+hello="hellllllo from mobile"
 
 class indexView(generic.ListView):
     model = Item
