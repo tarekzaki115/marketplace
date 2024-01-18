@@ -15,7 +15,6 @@ from user.models import User
 from user.forms import register_user_form, change_user_form
 from item.forms import create_item_form, edit_item_form
 
-hello="hellllllo from mobile"
 
 class indexView(generic.ListView):
     model = Item
@@ -192,14 +191,14 @@ class SearchItemView(View):
             query = self.request.GET.get("q")
             category = Category.objects.get(pk=pk)
             items = Item.objects.filter(
-                Q(item_name__contain=query) & Q(category=category)
+                Q(item_name__contains=query) & Q(category=category)
             )
             context = {"category": category, "items": items}
             return render(request, "core/search.html", context)
 
         elif pk == None and search:
             query = self.request.GET.get("q")
-            items = Item.objects.filter(item_name__contain=query)
+            items = Item.objects.filter(item_name__contains=query)
             context = {"items": items}
             return render(request, "core/search.html", context)
         else:

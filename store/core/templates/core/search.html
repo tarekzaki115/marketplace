@@ -23,8 +23,9 @@
                 </ul>
             </div><br><br>
         {% endfor %}
+    {%endif%}
 
-        {%if items%}
+    {%if items%}
                 {% for item in items%}
                 <div>
                     <ul>
@@ -36,7 +37,7 @@
                 </div><br><br>
                 {% endfor %}
         
-        {% endif %}
+    {% else %}
             <p>There are no items</p>
     {%endif%}
 <div>
