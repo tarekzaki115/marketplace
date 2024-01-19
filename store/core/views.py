@@ -207,11 +207,12 @@ class SearchItemView(View):
             items = Item.objects.all()
             context = {"categories": categories, "items": items}
             return render(request, "core/search.html", context)
-            
-            
+
+
 class chatView(View):
-	def get(self, request, sender_pk, receiver_pk):
-		chat = Chat.objects.filter()
-		
-	def post(self, request, sender_pk, receiver_pk):
-		
+    def get(self, request, sender_pk, receiver_pk):
+        chat = Chat.objects.filter()
+        return
+
+    def post(self, request, sender_pk, receiver_pk):
+        return
