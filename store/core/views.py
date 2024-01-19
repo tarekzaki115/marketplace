@@ -12,6 +12,7 @@ from django.db.models import Q
 
 from item.models import Category, Item
 from user.models import User
+from chat.models import Message, Chat
 from user.forms import register_user_form, change_user_form
 from item.forms import create_item_form, edit_item_form
 
@@ -206,3 +207,11 @@ class SearchItemView(View):
             items = Item.objects.all()
             context = {"categories": categories, "items": items}
             return render(request, "core/search.html", context)
+            
+            
+class chatView(View):
+	def get(self, request, sender_pk, receiver_pk):
+		chat = Chat.objects.filter()
+		
+	def post(self, request, sender_pk, receiver_pk):
+		
