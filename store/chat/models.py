@@ -25,8 +25,8 @@ class Message(models.Model):
 
     def get_messages(pk1, pk2):
         messages = []
-        messages1 = Message.objects.filter(sender_pk=pk1, receiver_pk=pk2)
-        messages2 = Message.objects.filter(sender_pk=pk2, receiver_pk=pk1)
+        messages1 = Message.objects.filter(sender_id=pk1, receiver_id=pk2)
+        messages2 = Message.objects.filter(sender_id=pk2, receiver_id=pk1)
         for x in range(len(messages1)):
             messages.append(messages1[x])
 

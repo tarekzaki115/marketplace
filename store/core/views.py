@@ -13,8 +13,10 @@ from django.db.models import Q
 from item.models import Category, Item
 from user.models import User
 from chat.models import Message
+
 from user.forms import register_user_form, change_user_form
 from item.forms import create_item_form, edit_item_form
+from chat.forms import chat_form
 
 
 class indexView(generic.ListView):
@@ -209,13 +211,42 @@ class SearchItemView(View):
             return render(request, "core/search.html", context)
 
 
-"sender = part1 and recev = part2  OR sender = part2 and recev = part1"
-
-
 class chatView(View):
-    def get(self, request, sender_pk, receiver_pk):
-        messages = Message.get_messages(sender_pk, receiver_pk)
-        return render(request, "core/chat.html", {"messages": messages})
+    def get(self, request, receiver_pk=None):
+        if request.user.is_authenticated:
+            sender = request.user
+            sender_pk = sender.id
+            chatMessages = Message.get_messages(sender_pk, receiver_pk)
+            form = chat_form()
+            context = {
+                "chatMessages": chatMessages,
+                "form": form,
+                "receiver_pk": receiver_pk,
+            }
+            return render(request, "core/chat.html", context)
+        else:
+            redirect(reverse_lazy("login"))
 
-    def post(self, request, sender_pk, receiver_pk):
-        return
+    def post(self, request, receiver_pk):
+        if request.user.is_authenticated:
+            form = chat_form(request.POST)
+            if form.is_valid():
+                sender = request.user
+                receiver = User.objects.get(id=receiver_pk)
+                message = form.save(commit=False)
+                message.sender = sender
+                message.receiver = receiver
+                message.save()
+                sender_pk = sender.id
+                chatMessages = Message.get_messages(sender_pk, receiver_pk)
+                form = chat_form()
+                context = {
+                    "chatMessages": chatMessages,
+                    "form": form,
+                    "receiver_pk": receiver_pk,
+                }
+                return render(request, "core/chat.html", context)
+            else:
+                messages.error(request, "Message was not sent")
+        else:
+            redirect(reverse_lazy("login"))

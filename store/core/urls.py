@@ -33,8 +33,8 @@ urlpatterns = [
         name="SearchItem",
     ),
     path(
-        "SearchItem/<int:pk>/<str:search>/",
-        SearchItemView.as_view(),
-        name="SearchItem",
+        "SearchItem/<int:pk>/<str:search>/", SearchItemView.as_view(), name="SearchItem"
     ),
+    path("chat/", chatView.as_view(), name="chat"),
+    path("chat/<int:receiver_pk>/", chatView.as_view(), name="chat"),
 ]
