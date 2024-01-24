@@ -216,14 +216,20 @@ class chatView(View):
         if request.user.is_authenticated:
             sender = request.user
             sender_pk = sender.id
-            chatMessages = Message.get_messages(sender_pk, receiver_pk)
-            form = chat_form()
-            context = {
-                "chatMessages": chatMessages,
-                "form": form,
-                "receiver_pk": receiver_pk,
-            }
-            return render(request, "core/chat.html", context)
+            checker = Message.chat_exists(sender_pk, receiver_pk)
+            if checker:
+                chatMessages = Message.get_all_messages_in_chat(sender_pk, receiver_pk)
+                form = chat_form()
+                context = {
+                    "chatMessages": chatMessages,
+                    "form": form,
+                    "receiver_pk": receiver_pk,
+                }
+                return render(request, "core/chat.html", context)
+            else:
+                form = chat_form()
+                context = {"form": form, "receiver_pk": receiver_pk}
+                return render(request, "core/chat.html", context)
         else:
             redirect(reverse_lazy("login"))
 
@@ -238,7 +244,7 @@ class chatView(View):
                 message.receiver = receiver
                 message.save()
                 sender_pk = sender.id
-                chatMessages = Message.get_messages(sender_pk, receiver_pk)
+                chatMessages = Message.get_all_messages_in_chat(sender_pk, receiver_pk)
                 form = chat_form()
                 context = {
                     "chatMessages": chatMessages,
