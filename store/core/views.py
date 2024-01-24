@@ -243,15 +243,10 @@ class chatView(View):
                 message.sender = sender
                 message.receiver = receiver
                 message.save()
-                sender_pk = sender.id
-                chatMessages = Message.get_all_messages_in_chat(sender_pk, receiver_pk)
-                form = chat_form()
-                context = {
-                    "chatMessages": chatMessages,
-                    "form": form,
-                    "receiver_pk": receiver_pk,
-                }
-                return render(request, "core/chat.html", context)
+                # this violates the  post redirect get patern
+                # ask nasser if it is a big deal
+                # because this saves me from rewritting code
+                return chatView.get(self, request, receiver_pk)
             else:
                 messages.error(request, "Message was not sent")
         else:
