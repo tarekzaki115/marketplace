@@ -3,7 +3,33 @@ from django.db import models
 from user.models import User
 from django.db.models import Q
 
-
+class Chat(models.Model):
+	participent1= models.ForeignKey(
+        User, on_delete=models.CASCADE, blank=False, null=False, related_name="participent1"
+    )
+	participent2 = models.ForeignKey(
+        User, on_delete=models.CASCADE, blank=False, null=False, related_name="participent2"
+    )
+    
+    @staticmethod
+    def get_open_chats(pk):
+    	chats = Chat.objects.filter(Q(participent1_id=pk) | Q(participent2_id=pk))
+    	chat_det = get_participents(pk, chats)
+    	
+    	return chat_det
+    	
+    @staticmethod
+    def get_participents(pk, chats):
+    	chat_det =[]
+    	for chat in chats:
+    		if chat.participent1_id ==pk:
+    			chat_det.append({chat: chat.participent1})
+    		else:
+    			chat.participent2_id ==pk:
+    			chat_det.append({chat: chat.participent2})
+    			
+    		return chat_det
+    	
 class Message(models.Model):
     sender = models.ForeignKey(
         User, on_delete=models.CASCADE, blank=False, null=False, related_name="sender"

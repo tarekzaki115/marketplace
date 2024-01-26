@@ -1,0 +1,13 @@
+{%extends 'core/includes/navBar.html' %} {%block content2%}
+<h2>Inbox</h2>
+
+{%load crispy_forms_tags%}
+{% for chat, user in chats.items() %}
+    <div>
+        <li><br><br>
+        {{chat}}
+        <br><br></li>
+    </div>
+{% endfor %}
+
+{%endblock%}

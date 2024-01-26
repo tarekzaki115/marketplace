@@ -12,7 +12,7 @@ from django.db.models import Q
 
 from item.models import Category, Item
 from user.models import User
-from chat.models import Message
+from chat.models import Message, Chat
 
 from user.forms import register_user_form, change_user_form
 from item.forms import create_item_form, edit_item_form
@@ -251,3 +251,10 @@ class chatView(View):
                 messages.error(request, "Message was not sent")
         else:
             redirect(reverse_lazy("login"))
+
+
+class inboxView(View):
+	def get(self, request):
+		sender = request.user
+		chats = Chat.get_open_chats(sender.id)
+		return render(request, "core/inbox.html", {"chats": chats})
