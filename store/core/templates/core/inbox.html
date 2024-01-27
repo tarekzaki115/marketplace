@@ -2,10 +2,15 @@
 <h2>Inbox</h2>
 
 {%load crispy_forms_tags%}
-{% for chat, user in chats.items() %}
+{% for user, last_message in chats.items %}
     <div>
         <li><br><br>
-        {{chat}}
+        {{user}}
+        <br>
+        <a href="{% url 'chat' user.id %}">
+            {{last_message.body}}
+        </a>
+        {{last_message.created_at}}
         <br><br></li>
     </div>
 {% endfor %}

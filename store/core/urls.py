@@ -37,4 +37,5 @@ urlpatterns = [
     ),
     path("chat/", chatView.as_view(), name="chat"),
     path("chat/<int:receiver_pk>/", chatView.as_view(), name="chat"),
+    path("inboxView/", inboxView.as_view(), name="inbox"),
 ]

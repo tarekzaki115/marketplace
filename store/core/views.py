@@ -242,7 +242,10 @@ class chatView(View):
                 message = form.save(commit=False)
                 message.sender = sender
                 message.receiver = receiver
+                checker = Message.chat_exists(sender.id, receiver_pk)
                 message.save()
+                if not checker:
+                    Chat.objects.create(participent1=sender, participent2=receiver)
                 # this violates the  post redirect get patern
                 # ask nasser if it is a big deal
                 # because this saves me from rewritting code
@@ -254,7 +257,7 @@ class chatView(View):
 
 
 class inboxView(View):
-	def get(self, request):
-		sender = request.user
-		chats = Chat.get_open_chats(sender.id)
-		return render(request, "core/inbox.html", {"chats": chats})
+    def get(self, request):
+        sender = request.user
+        chats = Chat.get_open_chats(sender.id)
+        return render(request, "core/inbox.html", {"chats": chats})
