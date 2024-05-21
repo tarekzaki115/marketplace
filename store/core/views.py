@@ -246,9 +246,7 @@ class chatView(View):
                 message.save()
                 if not checker:
                     Chat.objects.create(participent1=sender, participent2=receiver)
-                # this violates the  post redirect get patern
-                # ask nasser if it is a big deal
-                # because this saves me from rewritting code
+              
                 return chatView.get(self, request, receiver_pk)
             else:
                 messages.error(request, "Message was not sent")
